@@ -55,7 +55,7 @@ module Jekyll
 
       def raw_path
         @raw_path ||= begin
-          image_hash["path"] || image_hash["facebook"] || image_hash["twitter"]
+          url_to_social_card_creator_image || image_hash["path"] || image_hash["facebook"] || image_hash["twitter"]
         end
       end
 
@@ -77,6 +77,23 @@ module Jekyll
 
       def filters
         @filters ||= Jekyll::SeoTag::Filters.new(context)
+      end
+
+      def querystring_for_social_card_creator
+        URI.encode_www_form({
+          :heading => page.title
+        })
+      end
+
+      def url_to_social_card_creator_image
+        return nil unless page.respond_to?(:title) && page.title != ""
+
+        uri = URI::HTTPS.build(
+          :host => "socialcardcreator.com",
+          :path => "/api/v1/tmpl_01jbhz0mg4znnfsmap4dsh4an2.png",
+          :query => querystring_for_social_card_creator
+        )
+        uri.to_s
       end
     end
   end
