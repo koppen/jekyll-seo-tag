@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "uri"
+
 module Jekyll
   class SeoTag
     # A drop representing the page image
